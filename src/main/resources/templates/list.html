@@ -58,16 +58,16 @@
           <td><a th:href="@{/salaries/{id}(id=${salarie.id})}" class="btn btn-primary">Détail</a></td>
         </tr>
         <!-- Les lignes suivantes sont statiques et ne seront pas affichées lors du rendu Thymeleaf car th:each remplace tout le contenu du tbody ou se répète sur son élément -->
-        <tr th:remove="all">
+ <!--       <tr th:remove="all">
           <th scope="row">1</th>
           <td>Jeanne Dupond</td>
           <td><a href="/salaries/aide/2" class="btn btn-primary ember-view">Détail</a></td>
         </tr>
-        <tr th:remove="all">
+       <tr th:remove="all">
           <th scope="row">2</th>
           <td>Robert Martin</td>
           <td><a href="/salaries/aide/3" class="btn btn-primary ember-view">Détail</a></td>
-        </tr>
+        </tr> -->
         </tbody>
       </table>
       <div class="row">

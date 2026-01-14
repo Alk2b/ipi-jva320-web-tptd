@@ -1,5 +1,6 @@
 package com.ipi.jva320.Controllers;
 
+import com.ipi.jva320.exception.SalarieException;
 import com.ipi.jva320.model.SalarieAideADomicile;
 import com.ipi.jva320.service.SalarieAideADomicileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class SalarieController {
@@ -37,5 +39,11 @@ public class SalarieController {
         model.put("salarie", new SalarieAideADomicile());
         model.put("nombreSalaries", salarieService.countSalaries());
         return "detail_Salarie";
+    }
+
+    @PostMapping(value = "/salaries/save")
+    public String saveSalarie(SalarieAideADomicile salarie) throws SalarieException {
+        salarieService.creerSalarieAideADomicile(salarie);
+        return "redirect:/salaries/" + salarie.getId();
     }
 }
