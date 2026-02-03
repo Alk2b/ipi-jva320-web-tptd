@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -19,11 +22,20 @@ public class SalarieController {
     private SalarieAideADomicileService salarieService;
 
     @GetMapping(value = "/salaries")
-    public String listSalaries(ModelMap model, @RequestParam(required = false) String nom) {
+    public String listSalaries(ModelMap model, 
+                               @RequestParam(required = false) String nom,
+                               @RequestParam(required = false, defaultValue = "0") Integer page,
+                               @RequestParam(required = false, defaultValue = "10") Integer size,
+                               @RequestParam(required = false, defaultValue = "id") String sortProperty,
+                               @RequestParam(required = false, defaultValue = "ASC") String sortDirection) {
+        
+        Sort.Direction direction = sortDirection.equalsIgnoreCase("DESC") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortProperty));
+        
         if (nom != null && !nom.isEmpty()) {
-            model.put("salaries", salarieService.getSalaries(nom));
+            model.put("salaries", salarieService.getSalaries(nom, pageable));
         } else {
-            model.put("salaries", salarieService.getSalaries());
+            model.put("salaries", salarieService.getSalaries(pageable).getContent());
         }
         model.put("nombreSalaries", salarieService.countSalaries());
         return "list";
