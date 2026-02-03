@@ -12,7 +12,7 @@
 
     <h2>Détail du salarié</h2>
 
-    <form id="saveForm" action="http://localhost:8080/salaries/aide/10" th:action="${salarie.id != null} ? @{/salaries/{id}(id=${salarie.id})} : @{/salaries/save}" method="post" class="row">
+    <form id="saveForm" action="http://localhost:8080/salaries/aide/10" th:action="${salarie.id != null} ? @{/salaries/{id}(id=${salarie.id})} : @{/salaries/save}" th:object="${salarie}" method="post" class="row">
 
         <div class="col-lg-6">
             <div class="form-group">
@@ -20,14 +20,17 @@
                 <input type="text" value="10" th:value="${salarie.id}" class="form-control" name="id" id="id" disabled="true">
 
                 <label class="form-control-label" for="nom">Nom</label>
-                <input type="text" value="Jean Dupont" th:value="${salarie.nom}" class="form-control" name="nom" id="nom">
+                <input type="text" value="Jean Dupont" th:value="${salarie.nom}" class="form-control" th:classappend="${#fields.hasErrors('nom')} ? 'is-invalid'" name="nom" id="nom">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}" style="display: block; color: red;">Erreur nom</div>
 
                 <label class="form-control-label" for="moisEnCours">moisEnCours</label>
-                <input type="date" value="03/2023" th:value="${salarie.moisEnCours}" class="form-control" name="moisEnCours"
+                <input type="date" value="03/2023" th:value="${salarie.moisEnCours}" class="form-control" th:classappend="${#fields.hasErrors('moisEnCours')} ? 'is-invalid'" name="moisEnCours"
                        id="moisEnCours">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('moisEnCours')}" th:errors="*{moisEnCours}" style="display: block; color: red;">Erreur moisEnCours</div>
 
                 <label class="form-control-label" for="moisDebutContrat">moisDebutContrat</label>
-                <input type="date" value="08/2022" th:value="${salarie.moisDebutContrat}" class="form-control" name="moisDebutContrat" id="moisDebutContrat">
+                <input type="date" value="08/2022" th:value="${salarie.moisDebutContrat}" class="form-control" th:classappend="${#fields.hasErrors('moisDebutContrat')} ? 'is-invalid'" name="moisDebutContrat" id="moisDebutContrat">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('moisDebutContrat')}" th:errors="*{moisDebutContrat}" style="display: block; color: red;">Erreur moisDebutContrat</div>
             </div>
         </div>
 
@@ -89,16 +92,23 @@
             </div>
         </div>
 
+        <div class="col-lg-12" th:if="${#fields.hasErrors('*')}">
+            <div class="alert alert-danger">
+                <strong>Erreurs de validation :</strong>
+                <ul>
+                    <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Erreur</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-lg-12" th:if="${#fields.hasGlobalErrors()}">
+            <ul class="list-group list-unstyled">
+                <li class="alert alert-danger" role="alert" th:each="err : ${#fields.globalErrors()}" th:text="${err}">Erreur globale !</li>
+            </ul>
+        </div>
 
     </form>
 
-    <div class="row">
-        <div class="col-lg-6">
-            <ul class="list-group list-unstyled">
-                <li class="alert alert-danger" role="alert">Erreur dans un champ !</li>
-            </ul>
-        </div>
-    </div>
     <div class="row mt-2">
         <div class="col-lg-6">
             <input form="saveForm" class="btn btn-primary" type="submit" value="Enregistrer">
@@ -106,12 +116,6 @@
         </div>
     </div>
 
-    <div class="row">
-    <table>
-        <tr><td class="alert alert-danger" role="alert">Erreur de type de données !</td></tr>
-    </table>
-    <div>Erreur globale spécifique !</div>
-    </div>
 </div>
 
 

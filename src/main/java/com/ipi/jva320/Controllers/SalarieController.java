@@ -3,10 +3,13 @@ package com.ipi.jva320.Controllers;
 import com.ipi.jva320.exception.SalarieException;
 import com.ipi.jva320.model.SalarieAideADomicile;
 import com.ipi.jva320.service.SalarieAideADomicileService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -60,13 +63,22 @@ public class SalarieController {
     }
 
     @PostMapping(value = "/salaries/save")
-    public String saveSalarie(SalarieAideADomicile salarie) throws SalarieException {
+    public String saveSalarie(@Valid @ModelAttribute("salarie") SalarieAideADomicile salarie, BindingResult result, ModelMap model) throws SalarieException {
+        if (result.hasErrors()) {
+            model.put("nombreSalaries", salarieService.countSalaries());
+            return "detail_Salarie";
+        }
         salarieService.creerSalarieAideADomicile(salarie);
         return "redirect:/salaries/" + salarie.getId();
     }
 
     @PostMapping(value = "/salaries/{id}")
-    public String updateSalarie(@PathVariable Long id, SalarieAideADomicile salarie) throws SalarieException {
+    public String updateSalarie(@PathVariable Long id, @Valid @ModelAttribute("salarie") SalarieAideADomicile salarie, BindingResult result, ModelMap model) throws SalarieException {
+        if (result.hasErrors()) {
+            salarie.setId(id);
+            model.put("nombreSalaries", salarieService.countSalaries());
+            return "detail_Salarie";
+        }
         salarie.setId(id);
         salarieService.updateSalarieAideADomicile(salarie);
         return "redirect:/salaries/" + id;
