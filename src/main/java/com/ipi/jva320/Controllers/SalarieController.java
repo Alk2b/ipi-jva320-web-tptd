@@ -46,4 +46,11 @@ public class SalarieController {
         salarieService.creerSalarieAideADomicile(salarie);
         return "redirect:/salaries/" + salarie.getId();
     }
+
+    @PostMapping(value = "/salaries/{id}")
+    public String updateSalarie(@PathVariable Long id, SalarieAideADomicile salarie) throws SalarieException {
+        salarie.setId(id);
+        salarieService.updateSalarieAideADomicile(salarie);
+        return "redirect:/salaries/" + id;
+    }
 }

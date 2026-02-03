@@ -35,7 +35,7 @@
 
     <h2>Détail du salarié</h2>
 
-    <form id="saveForm" action="http://localhost:8080/salaries/aide/10" method="post" class="row">
+    <form id="saveForm" action="http://localhost:8080/salaries/aide/10" th:action="${salarie.id != null} ? @{/salaries/{id}(id=${salarie.id})} : @{/salaries/save}" method="post" class="row">
 
         <div class="col-lg-6">
             <div class="form-group">
