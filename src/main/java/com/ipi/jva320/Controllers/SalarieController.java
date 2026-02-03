@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import org.springframework.web.bind.annotation.RequestParam;
+
 @Controller
 public class SalarieController {
 
@@ -17,8 +19,12 @@ public class SalarieController {
     private SalarieAideADomicileService salarieService;
 
     @GetMapping(value = "/salaries")
-    public String listSalaries(ModelMap model) {
-        model.put("salaries", salarieService.getSalaries());
+    public String listSalaries(ModelMap model, @RequestParam(required = false) String nom) {
+        if (nom != null && !nom.isEmpty()) {
+            model.put("salaries", salarieService.getSalaries(nom));
+        } else {
+            model.put("salaries", salarieService.getSalaries());
+        }
         model.put("nombreSalaries", salarieService.countSalaries());
         return "list";
     }
