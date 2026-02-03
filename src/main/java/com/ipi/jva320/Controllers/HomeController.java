@@ -14,7 +14,7 @@ public class HomeController {
 
     @GetMapping(value = "/")
     public String home(final ModelMap model) {
-        model.put("msg_home", "Welcome to the HR administration interface!");
+        // msg_home est maintenant géré via messages.properties avec #{msg_home} dans le template
         model.put("nombreSalaries", salarieService.countSalaries());
         return "home";
     }
